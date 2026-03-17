@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Button, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, ScrollView, TouchableOpacity, Platform } from 'react-native';
 import React from 'react';
 import { PizzaController } from '../controllers/PizzaController'; 
 
@@ -50,11 +50,12 @@ const styles = StyleSheet.create({
     fontSize: 18,              
     fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: Platform.select({ ios: "San Francisco", android: "Roboto" })
   },
   inputContainer: {
-    flexDirection: 'row',
+  flexDirection: 'row',
     marginBottom: 20,           
-    gap: 10,                   
+    gap: 10,
     paddingHorizontal: 20,
   },
   input: {
@@ -75,6 +76,17 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
   },
   itemTexto: {
     fontSize: 18,              
