@@ -1,14 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Button, ScrollView, TouchableOpacity, Platform } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, ScrollView, TouchableOpacity, Platform, ImageBackground, useWindowDimensions } from 'react-native';
 import React from 'react';
 import { PizzaController } from '../controllers/PizzaController'; 
 
 export const PizzaView = () => {
   const { itens, texto, setTexto, addItem, removeItem } = PizzaController();
+  const { width, height } = useWindowDimensions();
 
   return (
-    <View style={styles.container}>
+    <ImageBackground 
+      source={require('../../assets/background.png')} 
+      style={[styles.background, { width, height }]}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay}>
+        
       <Text style={styles.titulo}>Cardápio de Pizzaria</Text>
+
 
       <View style={styles.inputContainer}>
         <TextInput
@@ -35,16 +43,11 @@ export const PizzaView = () => {
       </ScrollView>
       <StatusBar style="auto" />
     </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-    alignItems: 'center',      
-    paddingTop: 50,              
-  },
   titulo: {
     margin: 24,
     fontSize: 18,              
@@ -60,6 +63,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
+    backgroundColor: '#fff',
     borderWidth: 1,
     borderColor: '#ff0000',     
     padding: 10,                
@@ -74,8 +78,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    marginBottom: 10,
+    paddingHorizontal: 10,
     ...Platform.select({
       ios: {
         shadowColor: "#000",
@@ -100,5 +106,16 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 12,
     fontWeight: 'bold',
-  }
+  },
+  background: {
+  justifyContent: 'center',
+  alignItems: 'center',
+  },
+  overlay: {
+    flex: 1, 
+    width: '100%',
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    alignItems: 'center',
+    paddingTop: 60,
+  },
 });
