@@ -1,11 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Button, ScrollView, TouchableOpacity, Platform, ImageBackground, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, ScrollView, TouchableOpacity,Alert, Platform, ImageBackground, useWindowDimensions } from 'react-native';
 import React from 'react';
 import { PizzaController } from '../controllers/PizzaController'; 
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParams } from "../navigation/types";
 
 export const PizzaView = () => {
   const { itens, texto, setTexto, addItem, removeItem } = PizzaController();
   const { width, height } = useWindowDimensions();
+
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParams, "Home">>();
 
   return (
     <ImageBackground 
@@ -17,32 +22,37 @@ export const PizzaView = () => {
         
       <Text style={styles.titulo}>Cardápio de Pizzaria</Text>
 
-
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite uma pizza"
-          value={texto}
-          onChangeText={setTexto}
-        />
-        <Button title="Adicionar" onPress={addItem} />
-      </View>
-
+      <TouchableOpacity 
+          style={styles.botaoAdicionar} 
+          onPress={() => navigation.navigate("Cadastro")}
+        >
+          <Text style={styles.textoBotaoAdicionar}>+ Adicionar Novo Sabor</Text>
+        </TouchableOpacity>
+     
       <ScrollView style={styles.lista}>
         {itens.map((item) => (
           <View key={item.id} style={styles.itemContainer}>
             <Text style={styles.itemTexto}>{item.nome}</Text>
             <TouchableOpacity 
-              onPress={() => removeItem(item.id)}
-              style={styles.botaoDeletar}
-            >
-              <Text style={styles.textoBotaoDeletar}>Remover</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </ScrollView>
-      <StatusBar style="auto" />
-    </View>
+                onPress={() => {
+                  Alert.alert(
+                    "Remover Pizza",
+                    "Deseja excluir este item?",
+                    [
+                      { text: "Não", style: "cancel" },
+                      { text: "Sim", onPress: () => removeItem(item.id) }
+                    ]
+                  );
+                }}
+                style={styles.botaoDeletar}
+              >
+                <Text style={styles.textoBotaoDeletar}>Remover</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </ScrollView>
+        <StatusBar style="auto" />
+      </View>
     </ImageBackground>
   );
 };
@@ -118,4 +128,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 60,
   },
+  botaoAdicionar: {
+    backgroundColor: '#E67E22',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 20,
+    width: '90%',
+    alignItems: 'center',
+    elevation: 3,
+  },
+textoBotaoAdicionar: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+}
 });

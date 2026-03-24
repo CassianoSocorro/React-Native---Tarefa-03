@@ -1,6 +1,15 @@
 import React from "react";
-import { PizzaView } from "./src/views/PizzaViews"; 
+import { NavigationContainer } from "@react-navigation/native";
+import { StackNavigator } from "./src/navigation/StackNavigator";
 
 export default function App() {
-  return <PizzaView />;
+    return (
+      <NavigationContainer>
+      {
+
+      }
+      <StackNavigator />
+    </NavigationContainer>
+  );
+    
 }
