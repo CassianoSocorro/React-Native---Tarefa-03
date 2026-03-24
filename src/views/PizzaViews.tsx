@@ -1,16 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Button, ScrollView, TouchableOpacity,Alert, Platform, ImageBackground, useWindowDimensions } from 'react-native';
-import React from 'react';
+import { StyleSheet, Text, View, TextInput, Button, ScrollView, TouchableOpacity,Alert, Platform, ImageBackground, useWindowDimensions} from 'react-native';
+import React, {useCallback, useState} from 'react';
 import { PizzaController } from '../controllers/PizzaController'; 
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParams } from "../navigation/types";
 
 export const PizzaView = () => {
-  const { itens, texto, setTexto, addItem, removeItem } = PizzaController();
+  const { itens, removeItem, sincronizar } = PizzaController();
   const { width, height } = useWindowDimensions();
 
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams, "Home">>();
+
+   useFocusEffect(
+    useCallback(() => {
+      sincronizar();
+    }, [])
+  );
 
   return (
     <ImageBackground 
@@ -29,10 +35,13 @@ export const PizzaView = () => {
           <Text style={styles.textoBotaoAdicionar}>+ Adicionar Novo Sabor</Text>
         </TouchableOpacity>
      
-      <ScrollView style={styles.lista}>
+      <ScrollView style={styles.lista}
+      contentContainerStyle={styles.listaConteudo}>
+
         {itens.map((item) => (
           <View key={item.id} style={styles.itemContainer}>
             <Text style={styles.itemTexto}>{item.nome}</Text>
+            
             <TouchableOpacity 
                 onPress={() => {
                   Alert.alert(
@@ -40,7 +49,7 @@ export const PizzaView = () => {
                     "Deseja excluir este item?",
                     [
                       { text: "Não", style: "cancel" },
-                      { text: "Sim", onPress: () => removeItem(item.id) }
+                       { text: "Sim", onPress: () => removeItem(item.id) }
                     ]
                   );
                 }}
@@ -141,5 +150,10 @@ textoBotaoAdicionar: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 16,
-}
-});
+},
+listaConteudo: {
+    flexDirection: 'column', 
+    gap: 10,                 
+    paddingBottom: 20,      
+  }
+})

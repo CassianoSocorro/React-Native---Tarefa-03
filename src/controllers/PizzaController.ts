@@ -1,9 +1,15 @@
 import { useState } from 'react';
 import { Pizza, PizzaService } from '../models/PizzaModel';
 
+let bancoDeDadosPizzas: Pizza[] = []
+
 export const PizzaController = () => {
-  const [itens, setItens] = useState<Pizza[]>([]);
+  const [itens, setItens] = useState<Pizza[]>(() => bancoDeDadosPizzas);
   const [texto, setTexto] = useState('');
+
+    const sincronizar = () => {
+    setItens([...bancoDeDadosPizzas]);
+  };
 
   const addItem = () => {
     const erro = PizzaService.validarSabor(texto, itens);
@@ -18,13 +24,14 @@ export const PizzaController = () => {
       nome: texto,
     };
 
-    setItens([...itens, novoItem]);
-    setTexto(''); 
-  };
-
+    bancoDeDadosPizzas = [...bancoDeDadosPizzas, novoItem];
+    setItens(bancoDeDadosPizzas);
+    setTexto('');
+  }
   const removeItem = (id: number) => {
-    setItens(itens.filter(item => item.id !== id));
+    bancoDeDadosPizzas = bancoDeDadosPizzas.filter(item => item.id !== id)
+    setItens(bancoDeDadosPizzas);
   };
   
-  return { itens, texto, setTexto, addItem, removeItem };
+  return { itens, texto, setTexto, addItem, removeItem, sincronizar  };
 };
