@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, TextInput, Button, StyleSheet, Platform } from 'react-native';
+import React from "react";
+import { View, TextInput, Button, StyleSheet, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { PizzaController } from '../controllers/PizzaController';
+import { PizzaController } from "../controllers/PizzaController";
 
 export const CadastroPizzaView = () => {
   const { texto, setTexto, addItem } = PizzaController();
@@ -9,27 +9,23 @@ export const CadastroPizzaView = () => {
 
   const salvar = () => {
     if (texto.trim() === "") return;
-    
+
     addItem();
-    navigation.goBack(); 
+    navigation.goBack();
   };
 
   return (
     <View style={styles.container}>
-      <TextInput 
-        style={styles.input} 
-        value={texto} 
-        onChangeText={setTexto} 
+      <TextInput
+        style={styles.input}
+        value={texto}
+        onChangeText={setTexto}
         placeholder="Ex: Frango com Catupiry"
         placeholderTextColor="#888"
       />
-      
+
       <View style={styles.buttonContainer}>
-        <Button 
-          title="Salvar no Cardápio" 
-          onPress={salvar} 
-          color="#C0392B" 
-        />
+        <Button title="Salvar no Cardápio" onPress={salvar} color="#C0392B" />
       </View>
     </View>
   );
@@ -38,14 +34,14 @@ export const CadastroPizzaView = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
     padding: 20,
-    justifyContent: 'center', 
+    justifyContent: "center",
   },
   input: {
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
     borderWidth: 1,
-    borderColor: '#DDD',
+    borderColor: "#DDD",
     padding: 15,
     borderRadius: 10,
     fontSize: 18,
@@ -54,6 +50,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     borderRadius: 10,
-    overflow: 'hidden',
-  }
+    overflow: "hidden",
+  },
 });
